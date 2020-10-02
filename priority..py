@@ -6,51 +6,6 @@ import random
 # ----------- FOR FINDING THE TABLE -----------------
 # EDIT THIS
 
-
-"""def findWT(pr_no, arrival, burst, n, wait):
-    service = [0 for i in range(n)]
-    service[0] = 0
-    wait[0] = 0
-    for i in range(1, n):
-        service[i] = service[i - 1] + burst[i - 1]
-        wait[i] = service[i] - arrival[i]
-        if wait[i] < 0:
-            wait[i] = 0
-
-
-def findTAT(pr_no, burst, wait, TAT):
-    for i in range(n):
-        TAT[i] = wait[i] + burst[i]
-
-
-def findAllTimes(pr_no, arrival, burst, n):
-    wait = [0 for i in range(n)]
-    TAT = [0 for i in range(n)]
-    total_wt = 0
-    total_tat = 0
-    findWT(pr_no, arrival, burst, n, wait)
-    findTAT(pr_no, burst, wait, TAT)
-    print("\npr_no\tburst\tarrival\tcomp\t TAT\t wait")
-    for i in range(n):
-        total_wt += wait[i]
-        total_tat += TAT[i]
-        comp = TAT[i] + arrival[i]
-        print(
-            i + 1,
-            "\t",
-            burst[i],
-            "\t",
-            arrival[i],
-            "\t",
-            comp,
-            "\t ",
-            TAT[i],
-            "\t ",
-            wait[i],
-        )
-    print("\nAverage waiting time = ", (total_wt / n))
-    print("Average turn around time = ", total_tat / n, "\n")
-"""
 def findWaitingTime(processes, n, wt):  
     rt = [0] * n 
   

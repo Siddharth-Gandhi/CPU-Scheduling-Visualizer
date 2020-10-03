@@ -127,7 +127,7 @@ def schedulingProcess(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],exit_time[-1]]))
+                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],time_slice]))
 
                 executed_process.append(ready_queue[0][0])
                 for j in range(len(process_data)):
@@ -144,7 +144,7 @@ def schedulingProcess(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],exit_time[-1]]))
+                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],ready_queue[0][2]]))
 
                 executed_process.append(ready_queue[0][0])
                 for j in range(len(process_data)):
@@ -166,7 +166,7 @@ def schedulingProcess(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],exit_time[-1]]))
+                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],time_slice]))
 
                 executed_process.append(normal_queue[0][0])
                 for j in range(len(process_data)):
@@ -182,7 +182,7 @@ def schedulingProcess(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],exit_time[-1]]))
+                process_exec[ready_queue[0][0]].append(tuple([start_time[-1],normal_queue[0][2]]))
 
                 executed_process.append(normal_queue[0][0])
                 for j in range(len(process_data)):

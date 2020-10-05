@@ -126,10 +126,20 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
 
 if __name__ == "__main__":
-    n = 5
-    pr_no = [1, 2, 3, 4, 5]
-    burst = [6, 2, 7, 3, 2]
-    arrival = [10, 1, 7, 4, 10]
+    n = int(input("Enter number of processes: "))
+    pr_no = []
+    burst = []
+    arrival = []
+    print("Enter in form of process_number, arrival, burst")
+    for i in range(n):
+        x, y, z = map(int, input().split())
+        pr_no.append(x)
+        arrival.append(y)
+        burst.append(z)
+    # n = 5
+    # pr_no = [1, 2, 3, 4, 5]
+    # burst = [6, 2, 7, 3, 2]
+    # arrival = [10, 1, 7, 4, 10]
     comp = [0 for i in range(n)]  # The completion time of all processes
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     pr_no, arrival, burst, comp = findAllTimes(pr_no, arrival, burst, comp, n)

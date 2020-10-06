@@ -14,7 +14,7 @@ def findWaitingTime(processes, n, wt):
         rt[i] = processes[i][1] 
      # declaring service array that stores 
     # cumulative burst time  
-    service = [0] * 5
+    service = [0] * n
   
     # Initilising initial elements  
     # of the arrays  
@@ -99,28 +99,7 @@ def find_gantt_array(pr_no, arrival, burst, n, priority):
 
     result = {pr: [] for pr in pr_no}
 
-    """for i in range(n):
-        # each element of mix is a tuple of form (pr_no, arrival, burst)
-        cur_pr = mix[i][0]
-        cur_arr = mix[i][1]
-        cur_burst = mix[i][2]
-
-        if i == 0:
-            # first item
-            result[cur_pr].append((cur_arr, cur_burst))
-            prev_end_time = cur_arr + cur_burst
-        else:
-            # check if prev is still executing ie current arrival < prev_end_time
-            if cur_arr >= prev_end_time:
-                # no conflicts
-                result[cur_pr].append((cur_arr, cur_burst))
-                prev_end_time = cur_arr + cur_burst
-            else:
-                # the current process arrives before the last one end
-                # so the start for current will be prev_end_time
-                result[cur_pr].append((prev_end_time, cur_burst))
-                prev_end_time = prev_end_time + cur_burst"""
-
+    
     t = 0
     prev=0
     while(True):
@@ -143,13 +122,7 @@ def find_gantt_array(pr_no, arrival, burst, n, priority):
             break
         prev=l[0][0]
         t = t+1
-        #else:
-        #    break
-    #print(result)
-    """for i in result.keys():
-        if(len(result[i])==1):
-            store=result[i][0]
-            result[i]=store"""
+    
 
     # at the end, all processes executed, so the previous end time is the final completion time
     # this final completion time is used in the plot function for setting the x limit
@@ -206,27 +179,11 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
 
 if __name__ == "__main__":
 
-    # User input
-    # n = int(input("Enter number of processes: "))
-
-    # pr_no = []
-    # burst = []
-    # arrival = []
-    # print("Enter in form of process_number, arrival, burst")
-    # for i in range(n):
-    #     x, y, z = map(int, input().split())
-    #     pr_no.append(x)
-    #     arrival.append(y)
-    #     burst.append(z)
-    # # sorting everything by arrival time
-    
-    # findAllTimes(pr_no, arrival, burst, n)
-    # plot(pr_no, arrival, burst, n)
-    n = 4
-    pr_no = [4, 2, 3, 1]
-    burst = [7, 3, 4, 5]
-    arrival = [3, 1, 2, 0]
-    priority = [2,4,1,3]
+    n = int(input('Enter number of processes: '))
+    pr_no = list(map(int,input('Enter the order of process number: ').split()))
+    burst = list(map(int,input("Enter burst time of each process : ").split()))
+    arrival = list(map(int,input("Enter arrival time of each process : ").split()))
+    priority = list(map(int,input("Enter priority of each process: ").split()))
     pr_no, arrival, burst, priority = sort_by_arrival(pr_no, arrival, burst, n, priority)
     
     
@@ -234,12 +191,4 @@ if __name__ == "__main__":
     #print(find_gantt_array(pr_no, arrival, burst, n))
     findAllTimes(pr_no, arrival, burst, n, priority)
     plot(pr_no, arrival, burst, n, priority)
-    """
-    plot(
-        [1, 2, 3, 4, 5],
-        [0, 1, 2, 3, 5],
-        [21, 3, 6, 2, 7],
-        5,
-        {1: [(0, 1), (19, 20)], 2: [(1, 3)], 3: [(6, 6)], 4: [(4, 2)], 5: [(12, 7)]},
-        40,
-    )"""
+    

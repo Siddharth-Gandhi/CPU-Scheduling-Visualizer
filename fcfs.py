@@ -158,35 +158,19 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 if __name__ == "__main__":
 
     # User input
-    # n = int(input("Enter number of processes: "))
+    n = int(input("Enter number of processes: "))
 
-    # pr_no = []
-    # burst = []
-    # arrival = []
-    # print("Enter in form of process_number, arrival, burst")
-    # for i in range(n):
-    #     x, y, z = map(int, input().split())
-    #     pr_no.append(x)
-    #     arrival.append(y)
-    #     burst.append(z)
-    # # sorting everything by arrival time
-    # pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
-    # findAllTimes(pr_no, arrival, burst, n)
-    # plot(pr_no, arrival, burst, n)
-    n = 4
-    pr_no = [4, 2, 3, 1]
-    burst = [7, 3, 4, 5]
-    arrival = [3, 1, 2, 0]
+    pr_no = []
+    burst = []
+    arrival = []
+    print("Enter in form of process_number, arrival, burst")
+    for i in range(n):
+        x, y, z = map(int, input().split())
+        pr_no.append(x)
+        arrival.append(y)
+        burst.append(z)
+    # sorting everything by arrival time
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     findAllTimes(pr_no, arrival, burst, n)
-    # plot(pr_no, arrival, burst, n)
-
-    # print(find_gantt_array(pr_no, arrival, burst, n))
-    plot(
-        [1, 2, 3, 4, 5],
-        [0, 1, 2, 3, 5],
-        [21, 3, 6, 2, 7],
-        5,
-        {1: [(0, 1), (19, 20)], 2: [(1, 3)], 3: [(6, 6)], 4: [(4, 2)], 5: [(12, 7)]},
-        40,
-    )
+    plot(pr_no, arrival, burst, n)
+   

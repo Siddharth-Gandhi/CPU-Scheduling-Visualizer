@@ -76,7 +76,7 @@ def get_cmap(n, name="hsv"):
 # EDIT THIS
 def find_gantt_array(pr_no, arrival, burst, n):
     mix = list(zip(pr_no, arrival, burst))
-    print(mix)
+    # print(mix)
     # Note: mix is already sorted by arrival before function call
 
     result = {pr: [] for pr in pr_no}
@@ -145,6 +145,9 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
+
+
+    # Static plotting
     for i in pr_no:
         # generating a random color
         # r = random.random()
@@ -152,6 +155,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
         # g = random.random()
         # color = (r, g, b)
         gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+
+    # trying to animate
     plt.show()
 
 
@@ -179,5 +184,6 @@ if __name__ == "__main__":
     burst = [10,1,5,2,7,3,6]
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     findAllTimes(pr_no, arrival, burst, n)
+    print(find_gantt_array(pr_no, arrival, burst, n))
     plot(pr_no, arrival, burst, n)  
 

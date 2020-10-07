@@ -73,6 +73,7 @@ def animate(i):
     # print(pr)
     # gnt.cla()
     gnt.broken_barh(lot, (pr, 1), facecolor=cmap(pr))
+
 # Static plotting
 # for i in pr_no:
 #     # generating a random color
@@ -82,5 +83,5 @@ def animate(i):
 #     # color = (r, g, b)
 #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
 
-anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval= 150)
+anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval= 50)
 plt.show()

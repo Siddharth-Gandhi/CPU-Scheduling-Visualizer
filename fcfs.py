@@ -4,8 +4,7 @@ import random
 
 # TAT: turn around time
 
-# ----------- FOR FINDING THE TABLE -----------------
-# EDIT THIS
+
 def findWT(pr_no, arrival, burst, n, wait):
     service = [0 for i in range(n)]
     service[0] = 0
@@ -51,9 +50,6 @@ def findAllTimes(pr_no, arrival, burst, n):
     print("Average turn around time = ", total_tat / n, "\n")
 
 
-# --------------------- TILL HERE --------------------------------
-
-
 def sort_by_arrival(pr_no, arrival, burst, n):
     # mix them all up in 1 function and then sort by arrival
     mix = list(zip(pr_no, arrival, burst))
@@ -73,11 +69,8 @@ def get_cmap(n, name="hsv"):
     return plt.cm.get_cmap(name, n)
 
 
-# ------------------------- FOR FINDING THE DICTIONARY -----------------------------
-# EDIT THIS
 def find_gantt_array(pr_no, arrival, burst, n):
     mix = list(zip(pr_no, arrival, burst))
-    # print(mix)
     # Note: mix is already sorted by arrival before function call
 
     result = {pr: [] for pr in pr_no}
@@ -107,9 +100,6 @@ def find_gantt_array(pr_no, arrival, burst, n):
     # at the end, all processes executed, so the previous end time is the final completion time
     # this final completion time is used in the plot function for setting the x limit
     return result, prev_end_time
-
-
-# ------------------------------ TILL HERE ------------------------------------------
 
 
 def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
@@ -156,20 +146,42 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     #     # color = (r, g, b)
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
 
+# ------------------------- ANIMATION -----------------------------
+# JUST ADD THIS PART IN PLOT FUNCTION FOR ANIMATING
     # Animation function
+
+    # you all don't need to bother about this most probably, but still if you want to know how it works
+
+    # here our frame is 1 second. so we will be plotting every second, but we can adjust the speed to make it faster 
+    
     def find(t):
+        # THE ENTIRE POINT OF THIS FUNCTION IS TO JUST FIND THE PROCESS NUMBER EXECUTING AT TIME t
+        # this is an absolutely inefficient function to find the pr_no that is going on at the time t
+        # just iterate through everything and check
+        # i'm sure that there's a more efficient way of doing this but i can't be bothered to think about it rn
+        # y'all can suggest a better algorithm if you want
         for i in gantt_array:
+            # i will be all the keys in gantt_array = pr_no
             for j in gantt_array[i]:
+                # iterate through the list of tuples (j) until we find a process such that t lies b/w start time, start time +
+                # amount of time the process is executing
                 if j[0] <= t <= j[0] + j[1]:
+                    # return in this form to make life easier for plotting (broken_barh)
                     return i, [(t, 1)]
 
     def animate(i):
-        pr, lot = find(i)
-        gnt.broken_barh(lot, (pr, 1), facecolor=cmap(pr))
+        # find pr (process number), time is just i (current frame = current second), but to plot it we need to have it in list of tuple form
+        pr, time = find(i)
+        gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
+    # idk what the hell this is, just know that animate will plot the function for every frame
+    # frames is total frames, ie total time completed we'll take
+    # frames = final_comp_time will just work as range(final_comp_time)
+    # intervals controls speed, idk how
     anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=50)
 
     plt.show()
+# ------------------------------ TILL HERE ------------------------------------------
 
 
 if __name__ == "__main__":
@@ -180,14 +192,18 @@ if __name__ == "__main__":
     pr_no = []
     burst = []
     arrival = []
+
     print("Enter in form of process_number, arrival, burst")
+
     for i in range(n):
         x, y, z = map(int, input().split())
         pr_no.append(x)
         arrival.append(y)
         burst.append(z)
+    
     # sorting everything by arrival time
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
+    
     findAllTimes(pr_no, arrival, burst, n)
     plot(pr_no, arrival, burst, n)
 

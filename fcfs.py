@@ -112,7 +112,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
+        gantt_array, final_comp_time = find_gantt_array(
+            pr_no, arrival, burst, n)
 
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
@@ -152,8 +153,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # you all don't need to bother about this most probably, but still if you want to know how it works
 
-    # here our frame is 1 second. so we will be plotting every second, but we can adjust the speed to make it faster 
-    
+    # here our frame is 1 second. so we will be plotting every second, but we can adjust the speed to make it faster
+
     def find(t):
         # THE ENTIRE POINT OF THIS FUNCTION IS TO JUST FIND THE PROCESS NUMBER EXECUTING AT TIME t
         # this is an absolutely inefficient function to find the pr_no that is going on at the time t
@@ -178,7 +179,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # frames is total frames, ie total time completed we'll take
     # frames = final_comp_time will just work as range(final_comp_time)
     # intervals controls speed, idk how
-    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=50)
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, interval=50)
 
     plt.show()
 # ------------------------------ TILL HERE ------------------------------------------
@@ -187,31 +189,31 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 if __name__ == "__main__":
 
     # User input
-    n = int(input("Enter number of processes: "))
+    # n = int(input("Enter number of processes: "))
 
-    pr_no = []
-    burst = []
-    arrival = []
+    # pr_no = []
+    # burst = []
+    # arrival = []
 
-    print("Enter in form of process_number, arrival, burst")
+    # print("Enter in form of process_number, arrival, burst")
 
-    for i in range(n):
-        x, y, z = map(int, input().split())
-        pr_no.append(x)
-        arrival.append(y)
-        burst.append(z)
-    
+    # for i in range(n):
+    #     x, y, z = map(int, input().split())
+    #     pr_no.append(x)
+    #     arrival.append(y)
+    #     burst.append(z)
+
     # sorting everything by arrival time
-    pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
-    
-    findAllTimes(pr_no, arrival, burst, n)
-    plot(pr_no, arrival, burst, n)
-
-    # Sample input
-    # n = 7
-    # pr_no = [3,4,5,6,7,1,2]
-    # arrival = [3,7,8,15,25,0,2]
-    # burst = [10,1,5,2,7,3,6]
     # pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
+
     # findAllTimes(pr_no, arrival, burst, n)
     # plot(pr_no, arrival, burst, n)
+
+    # Sample input
+    n = 7
+    pr_no = [3, 4, 5, 6, 7, 1, 2]
+    arrival = [3, 7, 8, 15, 25, 0, 2]
+    burst = [10, 1, 5, 2, 7, 3, 6]
+    pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
+    findAllTimes(pr_no, arrival, burst, n)
+    plot(pr_no, arrival, burst, n)

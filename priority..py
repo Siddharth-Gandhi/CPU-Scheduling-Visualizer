@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import random
 
 # TAT: turn around time
@@ -167,23 +168,67 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
-    for i in pr_no:
-        # generating a random color
-        # r = random.random()
-        # b = random.random()
-        # g = random.random()
-        # color = (r, g, b)
-        gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+    # # Static plotting
+    # for i in pr_no:
+    #     # generating a random color
+    #     # r = random.random()
+    #     # b = random.random()
+    #     # g = random.random()
+    #     # color = (r, g, b)
+    #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+
+# ------------------------- ANIMATION -----------------------------
+# JUST ADD THIS PART IN PLOT FUNCTION FOR ANIMATING
+    # Animation function
+
+    # you all don't need to bother about this most probably, but still if you want to know how it works
+
+    # here our frame is 1 second. so we will be plotting every second, but we can adjust the speed to make it faster
+
+    def find(t):
+        # THE ENTIRE POINT OF THIS FUNCTION IS TO JUST FIND THE PROCESS NUMBER EXECUTING AT TIME t
+        # this is an absolutely inefficient function to find the pr_no that is going on at the time t
+        # just iterate through everything and check
+        # i'm sure that there's a more efficient way of doing this but i can't be bothered to think about it rn
+        # y'all can suggest a better algorithm if you want
+        for i in gantt_array:
+            # i will be all the keys in gantt_array = pr_no
+            for j in gantt_array[i]:
+                # iterate through the list of tuples (j) until we find a process such that t lies b/w start time, start time +
+                # amount of time the process is executing
+                if j[0] <= t <= j[0] + j[1]:
+                    # return in this form to make life easier for plotting (broken_barh)
+                    return i, [(t, 1)]
+
+    def animate(i):
+        # find pr (process number), time is just i (current frame = current second), but to plot it we need to have it in list of tuple form
+        pr, time = find(i)
+        gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+
+    # idk what the hell this is, just know that animate will plot the function for every frame
+    # frames is total frames, ie total time completed we'll take
+    # frames = final_comp_time will just work as range(final_comp_time)
+    # intervals controls speed, idk how
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, interval=50)
+
     plt.show()
+# ------------------------------ TILL HERE ------------------------------------------
 
 
 if __name__ == "__main__":
 
-    n = int(input('Enter number of processes: '))
-    pr_no = list(map(int,input('Enter the order of process number: ').split()))
-    burst = list(map(int,input("Enter burst time of each process : ").split()))
-    arrival = list(map(int,input("Enter arrival time of each process : ").split()))
-    priority = list(map(int,input("Enter priority of each process: ").split()))
+    #n = int(input('Enter number of processes: '))
+    #pr_no = list(map(int,input('Enter the order of process number: ').split()))
+    #burst = list(map(int,input("Enter burst time of each process : ").split()))
+    #arrival = list(map(int,input("Enter arrival time of each process : ").split()))
+    #priority = list(map(int,input("Enter priority of each process: ").split()))
+
+    n = 7
+    pr_no = [3, 4, 5, 6, 7, 1, 2]
+    arrival = [3, 7, 8, 15, 25, 0, 2]
+    burst = [10, 1, 5, 2, 7, 3, 6]
+    priority = [4, 2, 3, 5, 7, 1, 6]
     pr_no, arrival, burst, priority = sort_by_arrival(pr_no, arrival, burst, n, priority)
     
     

@@ -6,7 +6,7 @@ import Algorithms.sjfpre
 import Algorithms.priority
 import Algorithms.rr
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 
 
 @app.route("/")
@@ -27,8 +27,7 @@ def fcfs():
         print(burst)
         algoName = request.form["algo"]
         if algoName == "FCFS":
-            pr_no, arrival, burst = FCFS.sort_by_arrival(
-                pr_no, arrival, burst, n)
+            pr_no, arrival, burst = FCFS.sort_by_arrival(pr_no, arrival, burst, n)
             # FCFS.findAllTimes(pr_no, arrival, burst, n)
             FCFS.plot(pr_no, arrival, burst, n)
         return render_template(

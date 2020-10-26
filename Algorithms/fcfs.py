@@ -126,8 +126,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(
-            pr_no, arrival, burst, n)
+        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
 
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
@@ -173,15 +172,19 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, blit=False, interval=150,
-        save_count=200)
+        fig, animate, frames=final_comp_time, blit=False, interval=150, save_count=200
+    )
 
     # plt.show()
 
     # mpld3.show(fig, "127.0.0.1", 5000)
-    if os.path.exists('./temp.gif'):
-        os.remove('temp.gif')
-    anim.save('temp.gif', writer='pillow', fps=60)
+    if os.path.exists("./temp.gif"):
+        os.remove("temp.gif")
+    anim.save(
+        "E:\\VIT ACADEMICS\\Semester 3 Fall 2020-21\\CSE2005 Operating Systems\\PROJECT\\os pj\\OS-visualizer-project\\static\\temp.gif",
+        writer="pillow",
+        fps=60,
+    )
 
 
 if __name__ == "__main__":

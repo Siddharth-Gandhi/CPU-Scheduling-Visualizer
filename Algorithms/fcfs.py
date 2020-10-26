@@ -1,11 +1,15 @@
-import matplotlib.pyplot as plt, mpld3
+import matplotlib.pyplot as plt
+import mpld3
 import matplotlib.animation as animation
 import random
+import os
 
 # TAT: turn around time
 
 # ----------- FOR FINDING THE TABLE -----------------
 # EDIT THIS
+
+
 def findWT(pr_no, arrival, burst, n, wait):
     service = [0 for i in range(n)]
     service[0] = 0
@@ -122,7 +126,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
+        gantt_array, final_comp_time = find_gantt_array(
+            pr_no, arrival, burst, n)
 
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
@@ -154,6 +159,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     #     # color = (r, g, b)
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
     # plt.show()
+
     def find(t):
         for i in gantt_array:
             for j in gantt_array[i]:
@@ -166,10 +172,16 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
             pr, time = find(i)
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
-    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, blit=False, interval=150,
+        save_count=200)
 
-    plt.show()
+    # plt.show()
+
     # mpld3.show(fig, "127.0.0.1", 5000)
+    if os.path.exists('./temp.gif'):
+        os.remove('temp.gif')
+    anim.save('temp.gif', writer='pillow', fps=60)
 
 
 if __name__ == "__main__":

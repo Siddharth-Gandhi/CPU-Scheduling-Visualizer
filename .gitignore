@@ -1,8 +1,3 @@
 visualizer_venv
 .vscode
-__pycache__
-Algorithms/__pycache__/fcfs.cpython-38.pyc
-Algorithms/__pycache__/priority.cpython-38.pyc
-Algorithms/__pycache__/rr.cpython-38.pyc
-Algorithms/__pycache__/sjf_non_pre.cpython-38.pyc
-Algorithms/__pycache__/sjfpre.cpython-38.pyc
+/Algorithms/__pycache__/*

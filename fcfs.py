@@ -182,7 +182,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # frames = final_comp_time will just work as range(final_comp_time)
     # intervals controls speed, idk how
     anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, interval=50)
+        fig, animate, frames=final_comp_time, interval=150)
 
     plt.show()
 # ------------------------------ TILL HERE ------------------------------------------

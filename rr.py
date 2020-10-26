@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import random
 
 def processData(no_of_processes):
     process_data = []
@@ -179,14 +181,6 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
 # gnt stands for gantt (just for our convenience)
     fig, gnt = plt.subplots()
 
-    # X axis: time
-    # Y axis: process number
-
-    # find the gantt array if we don't have a custom one
-#     if gantt_array == None and final_comp_time == None:
-#         gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
-
-    # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
 
     # x limits from 0 to final_comp_time + 3 (for better visibility)
@@ -208,16 +202,23 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
-    for i in pr_no:
-        # generating a random color
-        # r = random.random()
-        # b = random.random()
-        # g = random.random()
-        # color = (r, g, b)
-        gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+
+    def find(t):
+        for i in gantt_array:
+            for j in gantt_array[i]:
+                if j[0] <= t <= j[0] + j[1]:
+                    return i, [(t, 1)]
+        return -1
+
+    def animate(i):
+        if find(i) != -1:
+            pr, time = find(i)
+            gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+
+    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
+
     plt.show()
 
 
 no_of_processes = int(input("Enter number of processes: "))
 processData(no_of_processes)
-

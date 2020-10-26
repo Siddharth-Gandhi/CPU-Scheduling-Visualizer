@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 
 # This function is used to sort by burst timeand check if the process has arrived
@@ -106,6 +107,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     if gantt_array == None and final_comp_time == None:
         gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, comp, n)
 
+    print(gantt_array)
     gnt.set_ylim(0, n + 2)
 
     gnt.set_xlim(0, final_comp_time + 3)
@@ -120,26 +122,43 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     gnt.grid(True)
 
     cmap = get_cmap(n + 1)
-    for i in pr_no:
-        gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+    # Static plotting
+    # for i in pr_no:
+    #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+    # plt.show()
+
+    def find(t):
+        for i in gantt_array:
+            for j in gantt_array[i]:
+                if j[0] <= t <= j[0] + j[1]:
+                    return i, [(t, 1)]
+        return -1
+
+    def animate(i):
+        if find(i) != -1:
+            pr, time = find(i)
+            gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+
+    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
+
     plt.show()
 
 
 if __name__ == "__main__":
-    n = int(input("Enter number of processes: "))
-    pr_no = []
-    burst = []
-    arrival = []
-    print("Enter in form of process_number, arrival, burst")
-    for i in range(n):
-        x, y, z = map(int, input().split())
-        pr_no.append(x)
-        arrival.append(y)
-        burst.append(z)
-    # n = 5
-    # pr_no = [1, 2, 3, 4, 5]
-    # burst = [6, 2, 7, 3, 2]
-    # arrival = [10, 1, 7, 4, 10]
+    # n = int(input("Enter number of processes: "))
+    # pr_no = []
+    # burst = []
+    # arrival = []
+    # print("Enter in form of process_number, arrival, burst")
+    # for i in range(n):
+    #     x, y, z = map(int, input().split())
+    #     pr_no.append(x)
+    #     arrival.append(y)
+    #     burst.append(z)
+    n = 5
+    pr_no = [1, 2, 3, 4, 5]
+    burst = [6, 2, 7, 3, 2]
+    arrival = [10, 1, 7, 4, 10]
     comp = [0 for i in range(n)]  # The completion time of all processes
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     pr_no, arrival, burst, comp = findAllTimes(pr_no, arrival, burst, comp, n)

@@ -169,11 +169,13 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
                 if j[0] <= t <= j[0] + j[1]:
                     # return in this form to make life easier for plotting (broken_barh)
                     return i, [(t, 1)]
+        return -1
 
     def animate(i):
         # find pr (process number), time is just i (current frame = current second), but to plot it we need to have it in list of tuple form
-        pr, time = find(i)
-        gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+        if find(i) != -1:
+            pr, time = find(i)
+            gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     # idk what the hell this is, just know that animate will plot the function for every frame
     # frames is total frames, ie total time completed we'll take

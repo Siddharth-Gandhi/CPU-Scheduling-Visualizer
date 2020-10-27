@@ -18,7 +18,7 @@
         <div class="row" style="margin: 20px auto;">
             <div class="col-sm">
                 <h2>{{ vals[0] }}</h2>
-                <table class="table table-bordered" style="color: #fff;">
+                <table class="table table-bordered table-sm" style="color: #fff;">
                     <thead class="thead-light">
                         <tr>
                             <th>Process No.</th>
@@ -52,7 +52,8 @@
                 <p>Average Turn Around Time = {{'%0.2f'|format(vals[8])}}</p>
             </div>
             <div class="col-sm">
-                <img id="{{vals[0]}}" alt="This is gif">
+                <img id="{{vals[0]}}" alt="This is gif"
+                    style="width:auto; height:360px; position:relative; left:70px; top: 20px;">
                 <script>
                     var myImgIdx = "{{vals[0]}}"
                     console.log(myImgIdx);

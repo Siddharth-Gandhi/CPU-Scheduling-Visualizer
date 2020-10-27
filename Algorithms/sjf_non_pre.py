@@ -56,9 +56,11 @@ def findAllTimes(pr_no, arrival, burst, comp, n):
             "\t",
             wait[i],
         )
+    avgWT = total_wt / n
+    avgTAT = total_tat / n
     print("\nAverage waiting time = ", (total_wt / n))
     print("Average turn around time = ", total_tat / n, "\n")
-    return pr_no, arrival, burst, comp
+    return pr_no, arrival, burst, comp, wait, TAT, avgWT, avgTAT
     # Returns the order in which the processes execute and corresponding values of arrival,
     # burst and completion time
 
@@ -100,7 +102,7 @@ def find_gantt_array(pr_no, arrival, burst, comp, n):
     return result, comp[n - 1]
 
 
-def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
+def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None):
 
     fig, gnt = plt.subplots()
 
@@ -140,8 +142,12 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
-
-    plt.show()
+    anim.save(
+        "static\\gifs\\SJFNPE.gif",
+        writer="pillow",
+        fps=60,
+    )
+    # plt.show()
 
 
 if __name__ == "__main__":
@@ -161,5 +167,5 @@ if __name__ == "__main__":
     arrival = [10, 1, 7, 4, 10]
     comp = [0 for i in range(n)]  # The completion time of all processes
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
-    pr_no, arrival, burst, comp = findAllTimes(pr_no, arrival, burst, comp, n)
-    plot(pr_no, arrival, burst, n)
+    pr_no, arrival, burst, comp, wait, TAT, avgWT, avgTAT = findAllTimes(pr_no, arrival, burst, comp, n)
+    plot(pr_no, arrival, burst, n, comp)

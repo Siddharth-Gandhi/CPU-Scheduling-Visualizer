@@ -193,7 +193,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     #         print("Error code:", err.code)
     # os.remove("static\\fcfs.gif")
     anim.save(
-        "static\\gifs\\fcfs.gif",
+        "static\\gifs\\FCFS.gif",
         writer="pillow",
         fps=60,
     )

@@ -24,7 +24,7 @@
                             <th>Process No.</th>
                             <th>Arrival Time</th>
                             <th>Burst Time</th>
-                            {% if vals[0]==  %}
+                            {% if vals[0]== "Priority" %}
                             <th>Priority</th>
                             {% endif %}
                             <th>Completion Time</th>
@@ -38,6 +38,9 @@
                             <td>{{vals[1][i]}}</td>
                             <td>{{vals[2][i]}}</td>
                             <td>{{vals[3][i]}}</td>
+                            {% if vals[0]== "Priority" %}
+                            <td>{{vals[9][i]}}</td>
+                            {% endif %}
                             <td>{{vals[6][i]}}</td>
                             <td>{{vals[5][i]}}</td>
                             <td>{{vals[4][i]}}</td>

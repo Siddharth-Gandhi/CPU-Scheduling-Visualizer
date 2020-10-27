@@ -37,28 +37,28 @@ def findAllTimes(pr_no, arrival, burst, n):
     total_tat = 0
     findWT(pr_no, arrival, burst, n, wait)
     findTAT(pr_no, burst, wait, TAT)
-    print("\npr_no\tburst\tarrival\tcomp\t TAT\t wait")
+    # print("\npr_no\tburst\tarrival\tcomp\t TAT\t wait")
     for i in range(n):
         total_wt += wait[i]
         total_tat += TAT[i]
         comp[i] = TAT[i] + arrival[i]
-        print(
-            i + 1,
-            "\t",
-            burst[i],
-            "\t",
-            arrival[i],
-            "\t",
-            comp[i],
-            "\t ",
-            TAT[i],
-            "\t ",
-            wait[i],
-        )
+        # print(
+        #     i + 1,
+        #     "\t",
+        #     burst[i],
+        #     "\t",
+        #     arrival[i],
+        #     "\t",
+        #     comp[i],
+        #     "\t ",
+        #     TAT[i],
+        #     "\t ",
+        #     wait[i],
+        # )
     avgWT = total_wt / n
     avgTAT = total_tat / n
-    print("\nAverage waiting time = ", (total_wt / n))
-    print("Average turn around time = ", total_tat / n, "\n")
+    # print("\nAverage waiting time = ", (total_wt / n))
+    # print("Average turn around time = ", total_tat / n, "\n")
     return wait, TAT, comp, avgWT, avgTAT
 
 
@@ -88,7 +88,7 @@ def get_cmap(n, name="hsv"):
 # EDIT THIS
 def find_gantt_array(pr_no, arrival, burst, n):
     mix = list(zip(pr_no, arrival, burst))
-    print(mix)
+    # print(mix)
     # Note: mix is already sorted by arrival before function call
 
     result = {pr: [] for pr in pr_no}
@@ -133,9 +133,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(
-            pr_no, arrival, burst, n)
-    print(gantt_array)
+        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
+    # print(gantt_array)
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
 

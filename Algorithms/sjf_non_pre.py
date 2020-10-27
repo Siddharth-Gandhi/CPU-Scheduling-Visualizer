@@ -31,7 +31,8 @@ def findAllTimes(pr_no, arrival, burst, comp, n):
     prevCompTime = 0
     for i in range(1, n):
         prevCompTime = comp[i - 1]  # completion time of previous process
-        pr_no, arrival, burst = customSort(pr_no, arrival, burst, n, i, prevCompTime)
+        pr_no, arrival, burst = customSort(
+            pr_no, arrival, burst, n, i, prevCompTime)
         if comp[i - 1] < arrival[i]:
             comp[i] = burst[i] + arrival[i]
         else:
@@ -107,7 +108,8 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
     fig, gnt = plt.subplots()
 
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, comp, n)
+        gantt_array, final_comp_time = find_gantt_array(
+            pr_no, arrival, burst, comp, n)
 
     # print(gantt_array)
     gnt.set_ylim(0, n + 2)
@@ -128,6 +130,7 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
     # for i in pr_no:
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
     # plt.show()
+    plt.title('SJT Non Pre')
 
     def find(t):
         for i in gantt_array:
@@ -141,7 +144,8 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
             pr, time = find(i)
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
-    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, interval=200)
     anim.save(
         "static\\gifs\\SJF Non Preemptive.gif",
         writer="pillow",

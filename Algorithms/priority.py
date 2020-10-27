@@ -1,90 +1,145 @@
+import pandas as pd
 import matplotlib.pyplot as plt
+import os
 import random
 import matplotlib.animation as animation
 
-# TAT: turn around time
 
-# ----------- FOR FINDING THE TABLE -----------------
-# EDIT THIS
-
-def findWaitingTime(processes, n, wt):  
-    rt = [0] * n 
-  
-    # Copy the burst time into rt[]  
-    for i in range(n):  
-        rt[i] = processes[i][1] 
-     # declaring service array that stores 
-    # cumulative burst time  
-    service = [0] * n
-  
-    # Initilising initial elements  
-    # of the arrays  
-    service[0] = 0
-    wt[0] = 0
-  
-    for i in range(1,n):  
-        service[i] = processes[i - 1][1] + service[i - 1]  
-        wt[i] = service[i] - processes[i][0] + 1
-  
-        # If waiting time is negative, 
-        # change it o zero  
-        if(wt[i] < 0) :      
-            wt[i] = 0
-  
-# Function to calculate turn around time  
-def findTurnAroundTime(processes, n, wt, tat):  
-      
-    # Calculating turnaround time  
-    for i in range(n): 
-        tat[i] = processes[i][1] + wt[i]  
-  
-# Function to calculate average waiting  
-# and turn-around times.  
-def findAllTimes(pr_no, arrival, burst, n, priority):  
-    processes=[list(a) for a in zip(pr_no, burst, arrival, priority)]
-    wt = [0] * n 
-    tat = [0] * n  
-  
-    # Function to find waiting time  
-    # of all processes  
-    findWaitingTime(processes, n, wt)  
-  
-    # Function to find turn around time 
-    # for all processes  
-    findTurnAroundTime(processes, n, wt, tat)  
-  
-    # Display processes along with all details  
-    print("Processes \t    Burst Time \t    Waiting",  
-                    "Time \t    Turn-Around Time") 
-    total_wt = 0
-    total_tat = 0
-    for i in range(n): 
-  
-        total_wt = total_wt + wt[i]  
-        total_tat = total_tat + tat[i]  
-        print(" ", processes[i][0], "\t\t\t",  
-                   processes[i][1], "\t\t\t",  
-                   wt[i], "\t\t", tat[i])
-    avgWT = total_wt /n
-    avgTAT = total_tat / n
-    print("\nAverage waiting time = %.5f "%(total_wt /n) ) 
-    print("Average turn around time = ", total_tat / n)
-    return wt, tat, avgWT, avgTAT
-# --------------------- TILL HERE --------------------------------
+def processData(no_of_processes, pr_no, arrival, burst, priority):
+    process_data = []
+    for i in range(no_of_processes):
+        temporary = []
+#         process_id = int(input("Enter Process ID: "))
+#         arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
+#         burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
+#         priority = int(input(f"Enter Priority for Process {process_id}: "))
+        temporary.extend(
+            [pr_no[i], arrival[i], burst[i], priority[i], 0, burst[i]])
+        '''
+        '0' is the state of the process. 0 means not executed and 1 means execution complete
+        '''
+        process_data.append(temporary)
+    return schedulingProcess(process_data)
 
 
-def sort_by_arrival(pr_no, arrival, burst, n, priority):
-    # mix them all up in 1 function and then sort by arrival
-    mix = list(zip(pr_no, arrival, burst,priority))
-    # thanks python for such ez sorting
-    mix.sort(key=lambda x: x[3])
+def schedulingProcess(process_data):
+    start_time = []
+    exit_time = []
+    s_time = 0
+    sequence_of_process = []
 
-    pr_no = [x[0] for x in mix]
-    arrival = [x[1] for x in mix]
-    burst = [x[2] for x in mix]
-    priority = [x[3] for x in mix]
+    process_exec = {}
+    for i in range(len(process_data)):
+        process_exec[i + 1] = []
 
-    return pr_no, arrival, burst, priority
+    process_data.sort(key=lambda x: x[1])
+    '''
+    Sort processes according to the Arrival Time
+    '''
+    while 1:
+        ready_queue = []
+        normal_queue = []
+        temp = []
+        for i in range(len(process_data)):
+            # if the process has arrived and it is still unexecuted
+            if process_data[i][1] <= s_time and process_data[i][4] == 0:
+                temp.extend([process_data[i][0], process_data[i][1], process_data[i][2], process_data[i][3],
+                             process_data[i][5]])
+                # then append the process in ready queue
+                ready_queue.append(temp)
+                # reset temp
+                temp = []
+            # if the process has not yet arrived but and is unexecuted
+            elif process_data[i][4] == 0:
+                temp.extend([process_data[i][0], process_data[i][1], process_data[i][2], process_data[i][4],
+                             process_data[i][5]])
+                # put the process in the normal queue
+                normal_queue.append(temp)
+                # reset temp
+                temp = []
+        # if all processes have executed break the loop
+        if len(ready_queue) == 0 and len(normal_queue) == 0:
+            break
+        # if there is a process in the ready queue
+        if len(ready_queue) != 0:
+            # sort the processes in the ready queue by priority
+            ready_queue.sort(key=lambda x: x[3], reverse=True)
+            start_time.append(s_time)
+            # execute the current process by 1 sec
+            s_time = s_time + 1
+            e_time = s_time
+            exit_time.append(e_time)
+            sequence_of_process.append(ready_queue[0][0])
+            # find the index of the currently running process
+            for k in range(len(process_data)):
+                if process_data[k][0] == ready_queue[0][0]:
+                    break
+
+            process_exec[ready_queue[0][0]].append(tuple([start_time[-1], 1]))
+
+            # reduce its burst time by 1
+            process_data[k][2] = process_data[k][2] - 1
+            # if the process completes its execution
+            if process_data[k][2] == 0:
+                # mark its completion
+                process_data[k][4] = 1
+                process_data[k].append(e_time)
+        if len(ready_queue) == 0:
+            normal_queue.sort(key=lambda x: x[1])
+            if s_time < normal_queue[0][1]:
+                s_time = normal_queue[0][1]
+            start_time.append(s_time)
+            s_time = s_time + 1
+            e_time = s_time
+            exit_time.append(e_time)
+
+            process_exec[ready_queue[0][0]].append(tuple([start_time[-1], 1]))
+
+            sequence_of_process.append(normal_queue[0][0])
+            for k in range(len(process_data)):
+                if process_data[k][0] == normal_queue[0][0]:
+                    break
+            process_data[k][2] = process_data[k][2] - 1
+            # if burst time is zero, it means process is completed
+            if process_data[k][2] == 0:
+                process_data[k][4] = 1
+                process_data[k].append(e_time)
+    return printData(process_data, process_exec)
+
+
+def printData(process_data, process_exec):
+    process_data.sort(key=lambda x: x[0])
+
+    result_df = pd.DataFrame()
+    process_ID = []
+    process_AT = []
+    process_BT = []
+    process_CT = []
+    process_pri = []
+    for i in range(len(process_data)):
+        process_ID.append(process_data[i][0])
+        process_AT.append(process_data[i][1])
+        process_BT.append(process_data[i][5])
+        process_CT.append(process_data[i][-1])
+        process_pri.append(process_data[i][3])
+
+    result_df['process_id'] = process_ID
+    result_df['process_priority'] = process_pri
+    result_df['arrival_time'] = process_AT
+    result_df['burst_time'] = process_BT
+    result_df['completion_time'] = process_CT
+    process_TT = result_df['completion_time']-result_df['arrival_time']
+    result_df['turnaround_time'] = process_TT
+    process_WT = result_df['turnaround_time']-result_df['burst_time']
+    result_df['waiting_time'] = process_WT
+    result_df.set_index('process_id', inplace=True)
+#     print(result_df)
+#     print("average turnaround time : {}".format(result_df['turnaround_time'].mean()))
+#     print("average waiting time : {}".format(result_df['waiting_time'].mean()))
+    avg_tat = result_df['turnaround_time'].mean()
+    avg_wt = result_df['waiting_time'].mean()
+    plot(process_ID, process_AT, process_BT, len(process_ID), process_exec, 40)
+    return result_df, avg_tat, avg_wt
 
 
 def get_cmap(n, name="hsv"):
@@ -93,50 +148,7 @@ def get_cmap(n, name="hsv"):
     return plt.cm.get_cmap(name, n)
 
 
-# ------------------------- FOR FINDING THE DICTIONARY -----------------------------
-# EDIT THIS
-def find_gantt_array(pr_no, arrival, burst, n, priority):
-    mix = [list(a) for a in zip(pr_no, burst, arrival, priority)]
-
-    # Note: mix is already sorted by arrival before function call
-
-    result = {pr: [] for pr in pr_no}
-
-    
-    t = 0
-    prev=0
-    while(True):
-        l = []
-        #print("mix" , mix)
-        for i in range(n):
-            if(mix[i][2] <= t and mix[i][1] > 0):
-                l.append(mix[i])
-        #print("l",l)
-        l.sort(key=lambda x: x[3])
-        #if(l[0][1] != 0):
-        if(len(l)>0):
-            if(l[0][0]==prev):
-                #print(result[l[0][0]])
-                result[l[0][0]][-1][1]+=1
-            else:
-                result[l[0][0]].append([t,1])
-            l[0][1] -= 1
-        else:
-            break
-        prev=l[0][0]
-        t = t+1
-    
-
-    # at the end, all processes executed, so the previous end time is the final completion time
-    # this final completion time is used in the plot function for setting the x limit
-    print( result)
-    return result,  result[n][-1][0]+ result[n][-1][1]
-
-
-# ------------------------------ TILL HERE ------------------------------------------
-
-
-def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=None):
+def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
     # default syntax, remember it
     # gnt stands for gantt (just for our convenience)
     fig, gnt = plt.subplots()
@@ -145,8 +157,8 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
     # Y axis: process number
 
     # find the gantt array if we don't have a custom one
-    if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n, priority)
+    #     if gantt_array == None and final_comp_time == None:
+    #         gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
 
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
@@ -178,6 +190,8 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
     #     # color = (r, g, b)
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
     # plt.show()
+    plt.title('Priority')
+
     def find(t):
         for i in gantt_array:
             for j in gantt_array[i]:
@@ -212,17 +226,13 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
 
 
 if __name__ == "__main__":
-
-    n = int(input('Enter number of processes: '))
-    pr_no = list(map(int,input('Enter the order of process number: ').split()))
-    burst = list(map(int,input("Enter burst time of each process : ").split()))
-    arrival = list(map(int,input("Enter arrival time of each process : ").split()))
-    priority = list(map(int,input("Enter priority of each process: ").split()))
-    pr_no, arrival, burst, priority = sort_by_arrival(pr_no, arrival, burst, n, priority)
-    
-    
-    # 
-    #print(find_gantt_array(pr_no, arrival, burst, n))
-    wt, tat, avgWT, avgTAT = findAllTimes(pr_no, arrival, burst, n, priority)
-    plot(pr_no, arrival, burst, n, priority)
-    
+    #     no_of_processes = int(input("Enter number of processes: "))
+    #     priority = Priority()
+    #     priority.processData(no_of_processes)
+    no_of_processes = 7  # int(input("Enter number of processes: "))
+    pr_no = [3, 4, 5, 6, 7, 1, 2]
+    arrival = [3, 7, 8, 15, 25, 0, 2]
+    burst = [10, 1, 5, 2, 7, 3, 6]
+    priority = [3, 4, 5, 6, 7, 1, 2]
+    temp = processData(no_of_processes, pr_no, arrival, burst, priority)
+    print(temp)

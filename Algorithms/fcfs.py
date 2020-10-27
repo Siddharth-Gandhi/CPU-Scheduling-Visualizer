@@ -133,7 +133,8 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
 
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
+        gantt_array, final_comp_time = find_gantt_array(
+            pr_no, arrival, burst, n)
     # print(gantt_array)
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
@@ -165,6 +166,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     #     # color = (r, g, b)
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
     # plt.show()
+    plt.title('FCFS')
 
     def find(t):
         for i in gantt_array:

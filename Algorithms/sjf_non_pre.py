@@ -130,7 +130,7 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
     # for i in pr_no:
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
     # plt.show()
-    plt.title('SJT Non Pre')
+    plt.title('SJF Non Pre')
 
     def find(t):
         for i in gantt_array:

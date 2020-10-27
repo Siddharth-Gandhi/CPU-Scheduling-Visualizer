@@ -1,4 +1,4 @@
 visualizer_venv
 .vscode
 /Algorithms/__pycache__/*
-/static/gifs
+/static/*

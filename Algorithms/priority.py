@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import random
+import matplotlib.animation as animation
 
 # TAT: turn around time
 
@@ -63,10 +64,12 @@ def findAllTimes(pr_no, arrival, burst, n, priority):
         total_tat = total_tat + tat[i]  
         print(" ", processes[i][0], "\t\t\t",  
                    processes[i][1], "\t\t\t",  
-                   wt[i], "\t\t", tat[i]) 
-  
+                   wt[i], "\t\t", tat[i])
+    avgWT = total_wt /n
+    avgTAT = total_tat / n
     print("\nAverage waiting time = %.5f "%(total_wt /n) ) 
-    print("Average turn around time = ", total_tat / n)  
+    print("Average turn around time = ", total_tat / n)
+    return wt, tat, avgWT, avgTAT
 # --------------------- TILL HERE --------------------------------
 
 
@@ -167,14 +170,45 @@ def plot(pr_no, arrival, burst, n, priority, gantt_array=None, final_comp_time=N
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
-    for i in pr_no:
-        # generating a random color
-        # r = random.random()
-        # b = random.random()
-        # g = random.random()
-        # color = (r, g, b)
-        gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
-    plt.show()
+    # for i in pr_no:
+    #     # generating a random color
+    #     # r = random.random()
+    #     # b = random.random()
+    #     # g = random.random()
+    #     # color = (r, g, b)
+    #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+    # plt.show()
+    def find(t):
+        for i in gantt_array:
+            for j in gantt_array[i]:
+                if j[0] <= t < j[0] + j[1]:
+                    return i, [(t, 1)]
+        return -1
+
+    def animate(i):
+        if find(i) != -1:
+            pr, time = find(i)
+            gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, blit=False, interval=150, save_count=200
+    )
+
+    # plt.show()
+
+    # mpld3.show(fig, "127.0.0.1", 5000)
+    # if os.path.exists("static\\fcfs.gif"):
+    #     try:
+    #         os.remove("static\\fcfs.gif")
+    #     except OSError as err:
+    #         print("Failed with:", err.strerror)  # look what it says
+    #         print("Error code:", err.code)
+    # os.remove("static\\fcfs.gif")
+    anim.save(
+        "static\\gifs\\Priority.gif",
+        writer="pillow",
+        fps=60,
+    )
 
 
 if __name__ == "__main__":
@@ -189,6 +223,6 @@ if __name__ == "__main__":
     
     # 
     #print(find_gantt_array(pr_no, arrival, burst, n))
-    findAllTimes(pr_no, arrival, burst, n, priority)
+    wt, tat, avgWT, avgTAT = findAllTimes(pr_no, arrival, burst, n, priority)
     plot(pr_no, arrival, burst, n, priority)
     

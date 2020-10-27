@@ -14,10 +14,14 @@
 
 <body style="margin: 30px 20px; background-color: rgb(39, 39, 39); color: white;">
     <div class="container-fluid" style="padding: 30px;">
+        <a href="/" class="btn btn-link">Go back</a>
         {% for vals in finalRes %}
         <div class="row" style="margin: 20px auto;">
             <div class="col-sm">
                 <h2>{{ vals[0] }}</h2>
+                {% if vals[0]== "Round Robin" %}
+                <p>The time quantum is {{ vals[9] }}</p>
+                {% endif %}
                 <table class="table table-bordered table-sm" style="color: #fff;">
                     <thead class="thead-light">
                         <tr>
@@ -52,7 +56,9 @@
                 <p>Average Turn Around Time = {{'%0.2f'|format(vals[8])}}</p>
             </div>
             <div class="col-sm">
-                <img id="{{vals[0]}}" alt="This is gif">
+                <!-- <img id="{{vals[0]}}" alt="This is gif"> -->
+                <img id="{{vals[0]}}" alt="This is gif"
+                    style="position: relative; left: 60px; top: 10px; width: auto; height: 370px;">
                 <script>
                     var myImgIdx = "{{vals[0]}}"
                     console.log(myImgIdx);
@@ -60,8 +66,12 @@
                 </script>
             </div>
         </div>
+        <!-- <hr style = "color: white; border: 10px solid white; border-style: none; border-top-style: dotted; width: 5%;"> -->
+        <hr style="border-top: 2px solid white;">
         {% endfor %}
+        
     </div>
+    
 
 
 </body>

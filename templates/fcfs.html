@@ -9,13 +9,13 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 </head>
-<body>
-    <div class="container-fluid">
+<body style="margin: 30px 20px; background-color: rgb(39, 39, 39); color: white;">
+    <div class="container-fluid border border-light" style="padding: 30px;">
         <div class="row">
             <div class="col-sm">
                 <h2>{{ algoName }}</h2>
-                <table class="table table-bordered">
-                    <thead class="thead-dark">
+                <table class="table table-bordered table-hover" style="color: #fff;">
+                    <thead class="thead-light">
                         <tr>
                             <th>Process No.</th>
                             <th>Arrival Time</th>
@@ -38,6 +38,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <p>Average Waiting Time = {{avgWT}}</p>
+                <p>Average Turn Around Time = {{avgTAT}}</p>
             </div>
             <div class="col-sm">
                 <img id="newImage" alt="This is gif">

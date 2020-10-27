@@ -31,7 +31,8 @@ def findAllTimes(pr_no, arrival, burst, comp, n):
     prevCompTime = 0
     for i in range(1, n):
         prevCompTime = comp[i - 1]  # completion time of previous process
-        pr_no, arrival, burst = customSort(pr_no, arrival, burst, n, i, prevCompTime)
+        pr_no, arrival, burst = customSort(
+            pr_no, arrival, burst, n, i, prevCompTime)
         if comp[i - 1] < arrival[i]:
             comp[i] = burst[i] + arrival[i]
         else:
@@ -107,7 +108,8 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
     fig, gnt = plt.subplots()
 
     if gantt_array == None and final_comp_time == None:
-        gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, comp, n)
+        gantt_array, final_comp_time = find_gantt_array(
+            pr_no, arrival, burst, comp, n)
 
     print(gantt_array)
     gnt.set_ylim(0, n + 2)
@@ -141,9 +143,10 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
             pr, time = find(i)
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
-    anim = animation.FuncAnimation(fig, animate, frames=final_comp_time, interval=200)
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, interval=200)
     anim.save(
-        "static\\gifs\\SJFNPE.gif",
+        "static\\gifs\\SJF Non Preemptive.gif",
         writer="pillow",
         fps=60,
     )
@@ -167,5 +170,6 @@ if __name__ == "__main__":
     arrival = [10, 1, 7, 4, 10]
     comp = [0 for i in range(n)]  # The completion time of all processes
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
-    pr_no, arrival, burst, comp, wait, TAT, avgWT, avgTAT = findAllTimes(pr_no, arrival, burst, comp, n)
+    pr_no, arrival, burst, comp, wait, TAT, avgWT, avgTAT = findAllTimes(
+        pr_no, arrival, burst, comp, n)
     plot(pr_no, arrival, burst, n, comp)

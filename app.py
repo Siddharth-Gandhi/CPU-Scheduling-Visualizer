@@ -28,10 +28,19 @@ def fcfs():
         algoName = request.form["algo"]
         if algoName == "FCFS":
             pr_no, arrival, burst = FCFS.sort_by_arrival(pr_no, arrival, burst, n)
-            # FCFS.findAllTimes(pr_no, arrival, burst, n)
+            wait, TAT, comp, avgWT, avgTAT = FCFS.findAllTimes(pr_no, arrival, burst, n)
             FCFS.plot(pr_no, arrival, burst, n)
         return render_template(
-            "temp.html", pr_no=pr_no, arrival=arrival, burst=burst, algoName=algoName
+            "fcfs.html",
+            pr_no=pr_no,
+            arrival=arrival,
+            burst=burst,
+            algoName=algoName,
+            wait=wait,
+            tat=TAT,
+            comp=comp,
+            avgWT=avgWT,
+            avgTAT=avgTAT,
         )
 
 

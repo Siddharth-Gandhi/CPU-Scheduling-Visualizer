@@ -1,3 +1,6 @@
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import mpld3
 import matplotlib.animation as animation
@@ -29,6 +32,7 @@ def findTAT(pr_no, burst, wait, TAT):
 def findAllTimes(pr_no, arrival, burst, n):
     wait = [0 for i in range(n)]
     TAT = [0 for i in range(n)]
+    comp = [0 for i in range(n)]
     total_wt = 0
     total_tat = 0
     findWT(pr_no, arrival, burst, n, wait)
@@ -37,7 +41,7 @@ def findAllTimes(pr_no, arrival, burst, n):
     for i in range(n):
         total_wt += wait[i]
         total_tat += TAT[i]
-        comp = TAT[i] + arrival[i]
+        comp[i] = TAT[i] + arrival[i]
         print(
             i + 1,
             "\t",
@@ -45,14 +49,17 @@ def findAllTimes(pr_no, arrival, burst, n):
             "\t",
             arrival[i],
             "\t",
-            comp,
+            comp[i],
             "\t ",
             TAT[i],
             "\t ",
             wait[i],
         )
+    avgWT = total_wt / n
+    avgTAT = total_tat / n
     print("\nAverage waiting time = ", (total_wt / n))
     print("Average turn around time = ", total_tat / n, "\n")
+    return wait, TAT, comp, avgWT, avgTAT
 
 
 # --------------------- TILL HERE --------------------------------
@@ -127,7 +134,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # find the gantt array if we don't have a custom one
     if gantt_array == None and final_comp_time == None:
         gantt_array, final_comp_time = find_gantt_array(pr_no, arrival, burst, n)
-
+    print(gantt_array)
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
 
@@ -162,7 +169,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     def find(t):
         for i in gantt_array:
             for j in gantt_array[i]:
-                if j[0] <= t <= j[0] + j[1]:
+                if j[0] <= t < j[0] + j[1]:
                     return i, [(t, 1)]
         return -1
 
@@ -178,10 +185,15 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # plt.show()
 
     # mpld3.show(fig, "127.0.0.1", 5000)
-    if os.path.exists("./temp.gif"):
-        os.remove("temp.gif")
+    # if os.path.exists("static\\fcfs.gif"):
+    #     try:
+    #         os.remove("static\\fcfs.gif")
+    #     except OSError as err:
+    #         print("Failed with:", err.strerror)  # look what it says
+    #         print("Error code:", err.code)
+    # os.remove("static\\fcfs.gif")
     anim.save(
-        "E:\\VIT ACADEMICS\\Semester 3 Fall 2020-21\\CSE2005 Operating Systems\\PROJECT\\os pj\\OS-visualizer-project\\static\\temp.gif",
+        "static\\gifs\\fcfs.gif",
         writer="pillow",
         fps=60,
     )

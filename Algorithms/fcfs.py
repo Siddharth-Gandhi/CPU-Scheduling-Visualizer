@@ -123,7 +123,7 @@ def find_gantt_array(pr_no, arrival, burst, n):
 # ------------------------------ TILL HERE ------------------------------------------
 
 
-def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
+def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None):
     # default syntax, remember it
     # gnt stands for gantt (just for our convenience)
     fig, gnt = plt.subplots()
@@ -181,7 +181,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, blit=False, interval=150, save_count=200
+        fig, animate, frames=final_comp_time, interval=speed
     )
 
     # plt.show()
@@ -196,8 +196,7 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # os.remove("static\\fcfs.gif")
     anim.save(
         "static\\gifs\\First Come First Serve.gif",
-        writer="pillow",
-        fps=60,
+        writer="pillow"
     )
 
 
@@ -225,4 +224,4 @@ if __name__ == "__main__":
     burst = [10, 1, 5, 2, 7, 3, 6]
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     findAllTimes(pr_no, arrival, burst, n)
-    plot(pr_no, arrival, burst, n)
+    plot(pr_no, arrival, burst, n, 50)

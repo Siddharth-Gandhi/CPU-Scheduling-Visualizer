@@ -16,6 +16,19 @@
         <form action="/result" method="post">
             <div class="form-row">
                 <div class="form-group col-md-3">
+                    <label for="speed">Speed</label>
+                    <!-- <input type="number" name="speed" id="speed" class="form-control"> -->
+                    <select name="speed" id="speed" class = "form-control">
+                        <option>Choose option</option>
+                        <option value="100">Fast</option>
+                        <option value="350">Medium</option>
+                        <option value="1000">Slow</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
                     <label for="noOfPr">Number of processes</label>
                     <input type="number" name="noOfPr" id="noOfPr" class="form-control">
                 </div>

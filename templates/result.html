@@ -12,11 +12,12 @@
     <meta http-equiv="Expires" content="0" />
 </head>
 
-<body style="margin: 30px 20px; background-color: rgb(39, 39, 39); color: white;">
+<body style="margin: 0px 20px; background-color: rgb(39, 39, 39); color: white;">
     <div class="container-fluid" style="padding: 30px;">
-        <a href="/" class="btn btn-link">Go back</a>
+        
+        <button class = "btn btn-light"><a href="/" style="color: black;">Go back</a></button>
         {% for vals in finalRes %}
-        <div class="row" style="margin: 20px auto;">
+        <div class="row" style="margin: 50px 0 ;">
             <div class="col-sm">
                 <h2>{{ vals[0] }}</h2>
                 {% if vals[0]== "Round Robin" %}
@@ -56,10 +57,10 @@
                 <p>Average Turn Around Time = {{'%0.2f'|format(vals[8])}}</p>
             </div>
             <div class="col-sm">
-                <!-- <img id="{{vals[0]}}" alt="This is gif"> -->
-                <img id="{{vals[0]}}" alt="This is gif"
-                    style="position: relative; left: 60px; top: 10px; width: auto; height: 370px;">
-                <script>
+                <img id="{{vals[0]}}" alt="This is gif">
+                <!-- <img id="{{vals[0]}}" alt="This is gif"
+                    style="position: relative; left: 60px; top: 10px; width: 50%; height: 370px;">-->
+                <script> 
                     var myImgIdx = "{{vals[0]}}"
                     console.log(myImgIdx);
                     document.getElementById(myImgIdx).src = "http://localhost:5000/static/gifs/" + myImgIdx + ".gif?" + new Date().getTime();
@@ -67,9 +68,17 @@
             </div>
         </div>
         <!-- <hr style = "color: white; border: 10px solid white; border-style: none; border-top-style: dotted; width: 5%;"> -->
-        <hr style="border-top: 2px solid white;">
+        <!-- <hr style="border-top: 1px solid white; width: 30%;"> -->
         {% endfor %}
-        
+        <h2>For the given input:</h2>
+        <ul>
+            <li>
+                {{ fastest_ct_name }} has the shortest average completion time with {{ '%0.2f'|format(fastest_ct) }} seconds
+            </li>
+            <li>
+                {{ fastest_wt_name }} has the shortest average waiting time with {{ '%0.2f'|format(fastest_wt) }} seconds
+            </li>
+        </ul>
     </div>
     
 

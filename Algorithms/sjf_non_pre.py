@@ -103,7 +103,7 @@ def find_gantt_array(pr_no, arrival, burst, comp, n):
     return result, comp[n - 1]
 
 
-def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None):
+def plot(pr_no, arrival, burst, n, comp, speed, gantt_array=None, final_comp_time=None):
 
     fig, gnt = plt.subplots()
 
@@ -135,7 +135,7 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
     def find(t):
         for i in gantt_array:
             for j in gantt_array[i]:
-                if j[0] <= t <= j[0] + j[1]:
+                if j[0] <= t < j[0] + j[1]:
                     return i, [(t, 1)]
         return -1
 
@@ -145,11 +145,10 @@ def plot(pr_no, arrival, burst, n, comp, gantt_array=None, final_comp_time=None)
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, interval=200)
+        fig, animate, frames=final_comp_time, interval=speed)
     anim.save(
         "static\\gifs\\SJF Non Preemptive.gif",
-        writer="pillow",
-        fps=60,
+        writer="pillow"
     )
     # plt.show()
 

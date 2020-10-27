@@ -5,7 +5,7 @@ import random
 import matplotlib.animation as animation
 
 
-def processData(no_of_processes, time_slice, pr_no, arrival, burst):
+def processData(no_of_processes, time_slice, pr_no, arrival, burst, speed):
     process_data = []
     # pr_no = [3, 4, 5, 6, 7, 1, 2]
     # arrival = [3, 7, 8, 15, 25, 0, 2]
@@ -22,10 +22,10 @@ def processData(no_of_processes, time_slice, pr_no, arrival, burst):
         """
         process_data.append(temporary)
     # time_slice = int(input("Enter Time Quantum : "))
-    return schedulingProcess(process_data, time_slice)
+    return schedulingProcess(process_data, time_slice, speed)
 
 
-def schedulingProcess(process_data, time_slice):
+def schedulingProcess(process_data, time_slice, speed):
     start_time = []
     exit_time = []
     executed_process = []
@@ -178,10 +178,10 @@ def schedulingProcess(process_data, time_slice):
                 process_data[j][2] = 0
                 process_data[j][3] = 1
                 process_data[j].append(e_time)
-    return printData(process_data, process_exec)
+    return printData(process_data, process_exec, speed)
 
 
-def printData(process_data, process_exec):
+def printData(process_data, process_exec, speed):
     # print(process_exec)
     process_data.sort(key=lambda x: x[0])
 
@@ -209,7 +209,8 @@ def printData(process_data, process_exec):
     # print("average turnaround time : {}".format(
     avg_tat = result_df["turnaround_time"].mean()
     avg_wt = result_df["waiting_time"].mean()
-    plot(process_ID, process_AT, process_BT, len(process_ID), process_exec, 40)
+    plot(process_ID, process_AT, process_BT, len(process_ID),
+         process_exec, max(list(result_df["completion_time"])), speed)
     return result_df, avg_tat, avg_wt
 
 
@@ -219,7 +220,7 @@ def get_cmap(n, name="hsv"):
     return plt.cm.get_cmap(name, n)
 
 
-def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
+def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time, speed):
     # default syntax, remember it
     # gnt stands for gantt (just for our convenience)
     fig, gnt = plt.subplots()
@@ -275,7 +276,7 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
     anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, blit=False, interval=150, save_count=200
+        fig, animate, frames=final_comp_time, interval=speed
     )
 
     # plt.show()
@@ -290,8 +291,7 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
     # os.remove("static\\fcfs.gif")
     anim.save(
         "static\\gifs\\Round Robin.gif",
-        writer="pillow",
-        fps=60,
+        writer="pillow"
     )
 
 

@@ -1,21 +1,28 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import random
+import matplotlib.animation as animation
 
 
-def processData(no_of_processes):
+def processData(no_of_processes, time_slice, pr_no, arrival, burst):
     process_data = []
+    # pr_no = [3, 4, 5, 6, 7, 1, 2]
+    # arrival = [3, 7, 8, 15, 25, 0, 2]
+    # burst = [10, 1, 5, 2, 7, 3, 6]
     for i in range(no_of_processes):
         temporary = []
         # process_id = int(input("Enter Process ID: "))
         # arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
         # burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
-        temporary.extend([process_id, arrival_time, burst_time, 0, burst_time])
+
+        temporary.extend([pr_no[i], arrival[i], burst[i], 0, burst[i]])
         """
         '0' is the state of the process. 0 means not executed and 1 means execution complete
         """
         process_data.append(temporary)
     # time_slice = int(input("Enter Time Quantum : "))
-    schedulingProcess(process_data, time_slice)
+    return schedulingProcess(process_data, time_slice)
 
 
 def schedulingProcess(process_data, time_slice):
@@ -171,11 +178,11 @@ def schedulingProcess(process_data, time_slice):
                 process_data[j][2] = 0
                 process_data[j][3] = 1
                 process_data[j].append(e_time)
-    printData(process_data, process_exec)
+    return printData(process_data, process_exec)
 
 
 def printData(process_data, process_exec):
-    print(process_exec)
+    # print(process_exec)
     process_data.sort(key=lambda x: x[0])
 
     result_df = pd.DataFrame()
@@ -198,10 +205,12 @@ def printData(process_data, process_exec):
     process_WT = result_df["turnaround_time"] - result_df["burst_time"]
     result_df["waiting_time"] = process_WT
     result_df.set_index("process_id", inplace=True)
-    print(result_df)
-    print("average turnaround time : {}".format(result_df["turnaround_time"].mean()))
-    print("average waiting time : {}".format(result_df["waiting_time"].mean()))
+    # print(result_df)
+    # print("average turnaround time : {}".format(
+    avg_tat = result_df["turnaround_time"].mean()
+    avg_wt = result_df["waiting_time"].mean()
     plot(process_ID, process_AT, process_BT, len(process_ID), process_exec, 40)
+    return result_df, avg_tat, avg_wt
 
 
 def get_cmap(n, name="hsv"):
@@ -244,16 +253,55 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time):
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
-    for i in pr_no:
-        # generating a random color
-        # r = random.random()
-        # b = random.random()
-        # g = random.random()
-        # color = (r, g, b)
-        gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
-    plt.show()
+    # for i in pr_no:
+    #     # generating a random color
+    #     # r = random.random()
+    #     # b = random.random()
+    #     # g = random.random()
+    #     # color = (r, g, b)
+    #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
+    # plt.show()
+
+    def find(t):
+        for i in gantt_array:
+            for j in gantt_array[i]:
+                if j[0] <= t < j[0] + j[1]:
+                    return i, [(t, 1)]
+        return -1
+
+    def animate(i):
+        if find(i) != -1:
+            pr, time = find(i)
+            gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
+
+    anim = animation.FuncAnimation(
+        fig, animate, frames=final_comp_time, blit=False, interval=150, save_count=200
+    )
+
+    # plt.show()
+
+    # mpld3.show(fig, "127.0.0.1", 5000)
+    # if os.path.exists("static\\fcfs.gif"):
+    #     try:
+    #         os.remove("static\\fcfs.gif")
+    #     except OSError as err:
+    #         print("Failed with:", err.strerror)  # look what it says
+    #         print("Error code:", err.code)
+    # os.remove("static\\fcfs.gif")
+    anim.save(
+        "static\\gifs\\Round Robin.gif",
+        writer="pillow",
+        fps=60,
+    )
 
 
 if __name__ == "__main__":
-    no_of_processes = int(input("Enter number of processes: "))
-    processData(no_of_processes)
+    no_of_processes = 7  # int(input("Enter number of processes: "))
+    print()
+    pr_no = [3, 4, 5, 6, 7, 1, 2]
+    arrival = [3, 7, 8, 15, 25, 0, 2]
+    burst = [10, 1, 5, 2, 7, 3, 6]
+    time_slice = 2
+    temp = processData(no_of_processes, time_slice,
+                       pr_no, arrival, burst)
+    print(temp)

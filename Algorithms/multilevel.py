@@ -2,17 +2,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import random
+import copy
 
 
 # --------------------START ROUND ROBIN------------------------------
 
-def process_data_s(ns, pr_no_s, burst_s, arrival_s):
-    process_data = []
-    for i in range(ns):
-        process_data.append(
-            [pr_no_s[i], arrival_s[i], burst_s[i], 0, burst_s[i]])
-
-    return process_data
+def process_data(n, pr_no, burst, arrival):
+    temp = []
+    for i in range(n):
+        temp.append(
+            [pr_no[i], arrival[i], burst[i], 0, burst[i]])
+    return temp
 
 
 def schedulingProcess_rr(process_data, time_slice):
@@ -24,7 +24,7 @@ def schedulingProcess_rr(process_data, time_slice):
 
     process_exec = {}
     for i in range(len(process_data)):
-        process_exec[i+1] = []
+        process_exec[process_data[i][0]] = []
 
     process_data.sort(key=lambda x: x[1])
     '''
@@ -118,7 +118,7 @@ def schedulingProcess_rr(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(
+                process_exec[normal_queue[0][0]].append(
                     tuple([start_time[-1], time_slice]))
 
                 executed_process.append(normal_queue[0][0])
@@ -135,7 +135,7 @@ def schedulingProcess_rr(process_data, time_slice):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(
+                process_exec[normal_queue[0][0]].append(
                     tuple([start_time[-1], normal_queue[0][2]]))
 
                 executed_process.append(normal_queue[0][0])
@@ -153,22 +153,8 @@ def schedulingProcess_rr(process_data, time_slice):
 
 # --------------------START preSJF------------------------------------------
 
-def processData_i(no_of_processes, pr_no, arrival, burst):
-    process_data = []
-    for i in range(no_of_processes):
-        temporary = []
-#         process_id = int(input("Enter Process ID: "))
-#         arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
-#         burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
-        temporary.extend([pr_no[i], arrival[i], burst[i], 0, burst[i]])
-        '''
-        '0' is the state of the process. 0 means not executed and 1 means execution complete
-        '''
-        process_data.append(temporary)
-    return schedulingProcess_i(process_data, arrival[0])
 
-
-def schedulingProcess_i(process_data, arr_time):
+def schedulingProcess_sjfpre(process_data):
     start_time = []
     exit_time = []
     s_time = 0
@@ -176,7 +162,7 @@ def schedulingProcess_i(process_data, arr_time):
 
     process_exec = {}
     for i in range(len(process_data)):
-        process_exec[i + 1] = []
+        process_exec[process_data[i][0]] = []
 
     process_data.sort(key=lambda x: x[1])
     '''
@@ -228,7 +214,7 @@ def schedulingProcess_i(process_data, arr_time):
             e_time = s_time
             exit_time.append(e_time)
 
-            process_exec[ready_queue[0][0]].append(tuple([start_time[-1], 1]))
+            process_exec[normal_queue[0][0]].append(tuple([start_time[-1], 1]))
 
             sequence_of_process.append(normal_queue[0][0])
             for k in range(len(process_data)):
@@ -239,14 +225,14 @@ def schedulingProcess_i(process_data, arr_time):
             if process_data[k][2] == 0:
                 process_data[k][3] = 1
                 process_data[k].append(e_time)
-    return process_exec
+    return process_exec, e_time
 
 # -------------------END SJF----------------------------------------------
 
+# -------------------PRIORITY START----------------------------------------
 
-# ------------------START PRIORITY-----------------------------------------------
 
-def processData_b(no_of_processes, pr_no, arrival, burst, priority):
+def process_data_priority(no_of_processes, pr_no, arrival, burst, priority):
     process_data = []
     for i in range(no_of_processes):
         temporary = []
@@ -255,23 +241,23 @@ def processData_b(no_of_processes, pr_no, arrival, burst, priority):
 #         burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
 #         priority = int(input(f"Enter Priority for Process {process_id}: "))
         temporary.extend(
-            [pr_no[i], arrival[i], burst[i], priority[i], 0, burst[i]])
+            [pr_no[i], burst[i], arrival[i], priority[i], 0, burst[i]])
         '''
         '0' is the state of the process. 0 means not executed and 1 means execution complete
         '''
         process_data.append(temporary)
-    return schedulingProcess_b(process_data, process_data[0][1])
+    return process_data
 
 
-def schedulingProcess_b(process_data, comp_time):
+def schedulingProcess_priority(process_data):
     start_time = []
     exit_time = []
-    s_time = comp_time
+    s_time = 0
     sequence_of_process = []
 
     process_exec = {}
     for i in range(len(process_data)):
-        process_exec[i + 1] = []
+        process_exec[process_data[i][0]] = []
 
     process_data.sort(key=lambda x: x[1])
     '''
@@ -334,7 +320,7 @@ def schedulingProcess_b(process_data, comp_time):
             e_time = s_time
             exit_time.append(e_time)
 
-            process_exec[ready_queue[0][0]].append(tuple([start_time[-1], 1]))
+            process_exec[normal_queue[0][0]].append(tuple([start_time[-1], 1]))
 
             sequence_of_process.append(normal_queue[0][0])
             for k in range(len(process_data)):
@@ -345,54 +331,11 @@ def schedulingProcess_b(process_data, comp_time):
             if process_data[k][2] == 0:
                 process_data[k][4] = 1
                 process_data[k].append(e_time)
-    return process_exec
-
-# ------------------END PRIORITY-----------------------------
+    return process_exec, e_time
 
 
+    # -------------------END PRIORITY-------------------------------------------
 if __name__ == '__main__':
-    #     ns = int(input('Enter number of system processes: '))
-    #     pr_no_s = list(map(int,input('Enter processes numbers: ').split()))
-    #     burst_s = list(map(int,input('Enter burst time of processses: ').split()))
-    #     arrival_s = [0 for i in range(ns)]
-    #     time_slice = int(input('Enter time quantam: '))
-    #     process_info_s=process_data_s(ns,pr_no_s,burst_s,arrival_s)
-    #     gant_array_s,e_time_s=schedulingProcess_rr(process_info_s,time_slice)
-    #     print(gant_array_s)
-    # ns = 3
-    # pr_no_s = [1, 2, 3]
-    # burst_s = [5, 2, 10]
-    # arrival_s = [0, 0, 2]
-    # time_slice = 2
-    # process_info_s = process_data_s(ns, pr_no_s, burst_s, arrival_s)
-    # gant_array_s, e_time_s = schedulingProcess_rr(process_info_s, time_slice)
-    # print(gant_array_s)
-
-    #     ni = int(input('Enter number of interactive processes: '))
-    #     pr_no_i = list(map(int,input('Enter processes numbers: ').split()))
-    # #     comp_i = [0 for i in range(ni)]
-    #     burst_i = list(map(int,input('Enter burst time of processses: ').split()))
-    #     arrival_i = [0 for i in range(ni)]
-    #     gant_array_i=processData_i(ni, pr_no_i, arrival_i, burst_i)
-    #     print(gant_array_i)
-    # ni = 3
-    # pr_no_i = [1, 2, 3]
-    # burst_i = [5, 2, 10]
-    # arrival_i = [0, 0, 2]
-    # gant_array_i = processData_i(ni, pr_no_i, arrival_i, burst_i)
-    # print(gant_array_i)
-
-    #     nb = int(input('Enter number of batch processes: '))
-    #     pr_no_b = list(map(int,input('Enter processes numbers: ').split()))
-    #     burst_b = list(map(int,input('Enter burst time of processses: ').split()))
-    #     arrival_b = [comp_time_i for i in range(nb)]
-    #     priority_b = list(map(int,input('Enter priority: ').split()))
-    #     gant_array_b=processData_b(nb, pr_no_b, arrival_b, burst_b, priority_b)
-    #     print(gant_array_b)
-    # 1 2 3 4 5 6 7 : pr_no
-    # 3 4 6 1 1 5 7 : burst
-    # .. arival
-    # S U I S S U I :
     n = 7
     pr_no = [3, 4, 5, 6, 7, 1, 2]
     arrival = [3, 7, 8, 15, 25, 0, 2]
@@ -415,10 +358,30 @@ if __name__ == '__main__':
             arrival_u.append(arrival[i])
             burst_u.append(burst[i])
     n_s, n_i, n_u = len(pr_no_s), len(pr_no_i), len(pr_no_u)
-
-    # first rr
-    print(n_s, pr_no_s, arrival_s, burst_s)
-    print(RR.processData(
-        n_s, quantum, pr_no_s, arrival_s, burst_s, 50))
+    process_data_s = process_data(n_s, pr_no_s, burst_s, arrival_s)
+    temp = copy.deepcopy(process_data_s)
+    gantt_s, end_s = schedulingProcess_rr(temp, quantum)
+    # print(process_data_s)
+    print(gantt_s)
+    print(end_s)
+    for i in range(len(arrival_i)):
+        arrival_i[i] += end_s
+    process_data_i = process_data(n_i, pr_no_i, burst_i, arrival_i)
+    temp = copy.deepcopy(process_data_i)
+    gantt_i, end_i = schedulingProcess_sjfpre(temp)
+    # print(process_data_i)
+    print(gantt_i)
+    print(end_i)
+    for i in range(len(arrival_u)):
+        arrival_u[i] += end_i
+    # print(arrival_u, pr_no_u, n_u, burst_u)
+    priority = [2, 1]
+    process_data_u = process_data_priority(
+        n_u, pr_no_u, burst_u, arrival_u, priority)
+    temp = copy.deepcopy(process_data_u)
+    print(process_data_u)
+    gantt_u, end_u = schedulingProcess_priority(temp)
+    print(gantt_u)
+    print(end_u)
 
 # s, u, i

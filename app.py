@@ -86,7 +86,8 @@ def result():
 
             temp = ["SJF Preemptive", sorted(pr_no), list(result["arrival_time"]), list(result["burst_time"]),
                     list(result["waiting_time"]), list(result["turnaround_time"]), list(result["completion_time"]), avgWT, avgTAT]
-            which_fastest["SJF Preemptive"] = [sum(comp)/n, avgWT]
+            which_fastest["SJF Preemptive"] = [
+                sum(list(result["completion_time"]))/n, avgWT]
             finalRes.append(temp)
 
         if "Priority" in algoName:
@@ -98,7 +99,8 @@ def result():
 
             temp = ["Priority", sorted(pr_no), list(result["arrival_time"]), list(result["burst_time"]),
                     list(result["waiting_time"]), list(result["turnaround_time"]), list(result["completion_time"]), avgWT, avgTAT, priority]
-            which_fastest["Priority"] = [sum(comp)/n, avgWT]
+            which_fastest["Priority"] = [
+                sum(list(result["completion_time"]))/n, avgWT]
             finalRes.append(temp)
 
         if "RR" in algoName:
@@ -109,7 +111,8 @@ def result():
 
             temp = ["Round Robin", sorted(pr_no), list(result["arrival_time"]), list(result["burst_time"]),
                     list(result["waiting_time"]), list(result["turnaround_time"]), list(result["completion_time"]), avgWT, avgTAT, quantum]
-            which_fastest["Round Robin"] = [sum(comp)/n, avgWT]
+            which_fastest["Round Robin"] = [
+                sum(list(result["completion_time"]))/n, avgWT]
             finalRes.append(temp)
         print(which_fastest)
         fastest_ct, fastest_ct_name = math.inf, None

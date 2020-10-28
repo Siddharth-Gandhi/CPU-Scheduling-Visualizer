@@ -30,7 +30,7 @@ def schedulingProcess(process_data, speed):
 
     process_exec = {}
     for i in range(len(process_data)):
-        process_exec[i + 1] = []
+        process_exec[process_data[i][0]] = []
 
     process_data.sort(key=lambda x: x[1])
     '''
@@ -93,7 +93,7 @@ def schedulingProcess(process_data, speed):
             e_time = s_time
             exit_time.append(e_time)
 
-            process_exec[ready_queue[0][0]].append(tuple([start_time[-1], 1]))
+            process_exec[normal_queue[0][0]].append(tuple([start_time[-1], 1]))
 
             sequence_of_process.append(normal_queue[0][0])
             for k in range(len(process_data)):
@@ -234,5 +234,5 @@ if __name__ == "__main__":
     arrival = [3, 7, 8, 15, 25, 0, 2]
     burst = [10, 1, 5, 2, 7, 3, 6]
     priority = [3, 4, 5, 6, 7, 1, 2]
-    temp = processData(no_of_processes, pr_no, arrival, burst, priority)
+    temp = processData(no_of_processes, pr_no, arrival, burst, priority, 150)
     print(temp)

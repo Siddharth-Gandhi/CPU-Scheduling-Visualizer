@@ -32,10 +32,10 @@ def schedulingProcess(process_data, time_slice, speed):
     ready_queue = []
     s_time = 0
 
+    # process_exec = dict.fromkeys([i[0] for i in process_data], [])
     process_exec = {}
     for i in range(len(process_data)):
-        process_exec[i + 1] = []
-
+        process_exec[process_data[i][0]] = []
     process_data.sort(key=lambda x: x[1])
     """
     Sort processes according to the Arrival Time
@@ -149,7 +149,7 @@ def schedulingProcess(process_data, time_slice, speed):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(
+                process_exec[normal_queue[0][0]].append(
                     tuple([start_time[-1], time_slice])
                 )
 
@@ -167,7 +167,7 @@ def schedulingProcess(process_data, time_slice, speed):
                 e_time = s_time
                 exit_time.append(e_time)
 
-                process_exec[ready_queue[0][0]].append(
+                process_exec[normal_queue[0][0]].append(
                     tuple([start_time[-1], normal_queue[0][2]])
                 )
 
@@ -296,12 +296,12 @@ def plot(pr_no, arrival, burst, n, gantt_array, final_comp_time, speed):
 
 
 if __name__ == "__main__":
-    no_of_processes = 7  # int(input("Enter number of processes: "))
+    no_of_processes = 3  # int(input("Enter number of processes: "))
     print()
-    pr_no = [3, 4, 5, 6, 7, 1, 2]
-    arrival = [3, 7, 8, 15, 25, 0, 2]
-    burst = [10, 1, 5, 2, 7, 3, 6]
+    pr_no = [3, 6, 7]
+    arrival = [3, 15, 25]
+    burst = [10, 2, 7]
     time_slice = 2
     temp = processData(no_of_processes, time_slice,
-                       pr_no, arrival, burst)
+                       pr_no, arrival, burst, 150)
     print(temp)

@@ -1,9 +1,5 @@
-<<<<<<< HEAD:fcfs.py
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-=======
-import os
->>>>>>> WebPage-module:Algorithms/fcfs.py
 import random
 import matplotlib.animation as animation
 import mpld3
@@ -14,12 +10,6 @@ matplotlib.use("Agg")
 
 # TAT: turn around time
 
-<<<<<<< HEAD:fcfs.py
-=======
-# ----------- FOR FINDING THE TABLE -----------------
-# EDIT THIS
-
->>>>>>> WebPage-module:Algorithms/fcfs.py
 
 def findWT(pr_no, arrival, burst, n, wait):
     service = [0 for i in range(n)]
@@ -91,10 +81,6 @@ def get_cmap(n, name="hsv"):
 
 def find_gantt_array(pr_no, arrival, burst, n):
     mix = list(zip(pr_no, arrival, burst))
-<<<<<<< HEAD:fcfs.py
-=======
-    # print(mix)
->>>>>>> WebPage-module:Algorithms/fcfs.py
     # Note: mix is already sorted by arrival before function call
 
     result = {pr: [] for pr in pr_no}
@@ -126,14 +112,7 @@ def find_gantt_array(pr_no, arrival, burst, n):
     return result, prev_end_time
 
 
-<<<<<<< HEAD:fcfs.py
 def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
-=======
-# ------------------------------ TILL HERE ------------------------------------------
-
-
-def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None):
->>>>>>> WebPage-module:Algorithms/fcfs.py
     # default syntax, remember it
     # gnt stands for gantt (just for our convenience)
     fig, gnt = plt.subplots()
@@ -145,11 +124,6 @@ def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None
     if gantt_array == None and final_comp_time == None:
         gantt_array, final_comp_time = find_gantt_array(
             pr_no, arrival, burst, n)
-<<<<<<< HEAD:fcfs.py
-
-=======
-    # print(gantt_array)
->>>>>>> WebPage-module:Algorithms/fcfs.py
     # the y limits will be from 0 to number of process + 2 (for better visibility)
     gnt.set_ylim(0, n + 2)
 
@@ -172,11 +146,8 @@ def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None
 
     # this is an array for different colors
     cmap = get_cmap(n + 1)
-<<<<<<< HEAD:fcfs.py
 
     # # Static plotting
-=======
->>>>>>> WebPage-module:Algorithms/fcfs.py
     # for i in pr_no:
     #     # generating a random color
     #     # r = random.random()
@@ -184,7 +155,6 @@ def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None
     #     # g = random.random()
     #     # color = (r, g, b)
     #     gnt.broken_barh(gantt_array[i], (i, 1), facecolor=cmap(i))
-<<<<<<< HEAD:fcfs.py
 
 # ------------------------- ANIMATION -----------------------------
 # JUST ADD THIS PART IN PLOT FUNCTION FOR ANIMATING
@@ -207,28 +177,15 @@ def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None
                 # amount of time the process is executing
                 if j[0] <= t <= j[0] + j[1]:
                     # return in this form to make life easier for plotting (broken_barh)
-=======
-    # plt.show()
-    plt.title('FCFS')
-
-    def find(t):
-        for i in gantt_array:
-            for j in gantt_array[i]:
-                if j[0] <= t < j[0] + j[1]:
->>>>>>> WebPage-module:Algorithms/fcfs.py
                     return i, [(t, 1)]
         return -1
 
     def animate(i):
-<<<<<<< HEAD:fcfs.py
         # find pr (process number), time is just i (current frame = current second), but to plot it we need to have it in list of tuple form
-=======
->>>>>>> WebPage-module:Algorithms/fcfs.py
         if find(i) != -1:
             pr, time = find(i)
             gnt.broken_barh(time, (pr, 1), facecolor=cmap(pr))
 
-<<<<<<< HEAD:fcfs.py
     # idk what the hell this is, just know that animate will plot the function for every frame
     # frames is total frames, ie total time completed we'll take
     # frames = final_comp_time will just work as range(final_comp_time)
@@ -238,26 +195,6 @@ def plot(pr_no, arrival, burst, n, speed, gantt_array=None, final_comp_time=None
 
     plt.show()
 # ------------------------------ TILL HERE ------------------------------------------
-=======
-    anim = animation.FuncAnimation(
-        fig, animate, frames=final_comp_time, interval=speed
-    )
-
-    # plt.show()
-
-    # mpld3.show(fig, "127.0.0.1", 5000)
-    # if os.path.exists("static\\fcfs.gif"):
-    #     try:
-    #         os.remove("static\\fcfs.gif")
-    #     except OSError as err:
-    #         print("Failed with:", err.strerror)  # look what it says
-    #         print("Error code:", err.code)
-    # os.remove("static\\fcfs.gif")
-    anim.save(
-        "static\\gifs\\First Come First Serve.gif",
-        writer="pillow"
-    )
->>>>>>> WebPage-module:Algorithms/fcfs.py
 
 
 if __name__ == "__main__":
@@ -290,8 +227,4 @@ if __name__ == "__main__":
     burst = [10, 1, 5, 2, 7, 3, 6]
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
     findAllTimes(pr_no, arrival, burst, n)
-<<<<<<< HEAD:fcfs.py
     plot(pr_no, arrival, burst, n)
-=======
-    plot(pr_no, arrival, burst, n, 50)
->>>>>>> WebPage-module:Algorithms/fcfs.py

@@ -192,8 +192,11 @@ def plot(pr_no, arrival, burst, n, gantt_array=None, final_comp_time=None):
     # intervals controls speed, idk how
     anim = animation.FuncAnimation(
         fig, animate, frames=final_comp_time, interval=150)
-
-    plt.show()
+    anim.save(
+        "static\\gifs\\FCFS.gif",
+        writer="pillow"
+    )
+    # plt.show()
 # ------------------------------ TILL HERE ------------------------------------------
 
 
@@ -226,5 +229,5 @@ if __name__ == "__main__":
     arrival = [3, 7, 8, 15, 25, 0, 2]
     burst = [10, 1, 5, 2, 7, 3, 6]
     pr_no, arrival, burst = sort_by_arrival(pr_no, arrival, burst, n)
-    findAllTimes(pr_no, arrival, burst, n)
+    print(findAllTimes(pr_no, arrival, burst, n))
     plot(pr_no, arrival, burst, n)
